@@ -66,15 +66,12 @@ while playerScore < 121 and comScore < 121:
     cribHand.append(playerHand[discard1])
     del playerHand[discard1]
 
-    #@O'Shea: this is the issue below
-    #For whatever reason, this loop doesn't kick in
-    #The program never prompts the user for a second discard choice
-    discardBool == False
+    discardBool = False
     while discardBool == False:   
         for i in range(0,len(playerHand)):
             print(playerHand[i])
-        discard2=int(input("Choose a card, 1-5, to send the the crib."))
-        if discard2 > 5 or discard2 < 1:
+        discard1=int(input("Choose a card, 1-5, to send the the crib."))
+        if discard1 > 5 or discard1 < 1:
             print('Try again.')
         else:
             discardBool = True 
@@ -83,9 +80,9 @@ while playerScore < 121 and comScore < 121:
     # cribHand.append(discardStr)
     # playerHand.remove(discardStr)
 
-    discard2 = int(discard2 - 1)
-    cribHand.append(playerHand[discard2])
-    del playerHand[discard2]
+    discard1 = int(discard1 - 1)
+    cribHand.append(playerHand[discard1])
+    del playerHand[discard1]
     
     # discard1 = int(random.randint(0,5))
     # discardStr = comHand[discard1]
@@ -96,6 +93,7 @@ while playerScore < 121 and comScore < 121:
     # cribHand.append(discardStr)
     # del comHand[discard1]
 
+    print('')
     print("Your hand: ")
     for i in range(0,len(playerHand)):
         print(playerHand[i])
