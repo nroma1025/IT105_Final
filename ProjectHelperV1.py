@@ -89,3 +89,30 @@ cribbageDict = {
     'Queen' : 10,
     'King' : 10
 }
+
+#test for discard phase
+# print('')
+# print("Your hand: ")
+# for i in range(0,len(playerHand)):
+#     print(playerHand[i])
+# print('')
+# print("Computuer's hand: ")
+# for i in range(0,len(comHand)):
+#     print(comHand[i])
+# print('')
+# print('Crib: ')
+# for i in range(0,len(cribHand)):
+#     print(cribHand[i])
+
+#Some random example code for accessing dicts
+# print(playerHand.get(1))
+# discardBool = False
+# for i in range(0,len(playerHand)):
+#     #print(playerHand[i])
+#     card = playerHand[i]
+#     cardVal = ProjectHelperV1.cribbageDict[card.value]
+#     print(cardVal)
+
+# comScore = 122
+
+def PlayScore(list):
