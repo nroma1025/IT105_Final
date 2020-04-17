@@ -12,6 +12,10 @@
 #thoughts: have a list, append each time a card is played. compare ranks to detect for non-con series?
 #thoughts: have a whole separate module to check for scoring conditions?
 #thoughts: make a roll check to see if the computer will forget to count points based on difficulty
+#thoughts: how am i going to let the game know if someone can take more consecutive turns?
+# can i sum up the 'play' list? do they have a number value? can i see if it's possible to sum up a user's hand to see if its a 'go'?
+#Definite trouble areas: nonconsec-series, 'go's, determining whose turn
+# If i can find a way to get into pydealer and turn 'value' from str to int, this would be good
 # - DONE - Stage: Intro
 # - DONE - Stage: Deal
 # - DONE - Stage: Discard
@@ -94,7 +98,7 @@ while playerScore < 121 and comScore < 121:
     cribHand.append(discardStr)
     del comHand[discard1]
 
-    # test for discard phase
+    #test for discard phase
     # print('')
     # print("Your hand: ")
     # for i in range(0,len(playerHand)):
@@ -107,15 +111,42 @@ while playerScore < 121 and comScore < 121:
     # print('Crib: ')
     # for i in range(0,len(cribHand)):
     #     print(cribHand[i])
-    # comScore = 122
+
+    print(playerHand.get(1))
+    discardBool = False
+    for i in range(0,len(playerHand)):
+        #print(playerHand[i])
+        card = playerHand[i]
+        print(playerHand.values[i])
+
+    comScore = 122
 
     # Stage: Play
-    communityCard = deck.deal(1)
-    print('Community Card: ' + communityCard)
-    if (playerDealer % 2) == 1:
-        print("You are the dealer, you play the first card.")
-        print('')
-    else:
-        print("The computer is the dealer, it will play first.")  
+    # communityCard = deck.deal(1)
+    # print('Community Card: ' + communityCard)
+    # if (playerDealer % 2) == 1:
+    #     print("You are the dealer, you play the first card.")
+    #     print('')
+    #     playerTurn = True 
+    # else:
+    #     print("The computer is the dealer, it will play first.")
+    #     playerTurn = False  
 
-      
+    # playList = []
+    # legalBool = False
+    # while len(playerHand) != 0 and len(comHand) != 0:
+    #     #find a way to sum everything in the playList, empty it if it's >= 31
+    #     if playerTurn == True:
+    #         legalBool = False
+    #         while legalBool == False:
+    #             for i in range(0,len(playerHand)):
+    #                 print(playerHand[i])
+    #             print('')
+    #             cardPlay = int(input("Select a card to play, 1-" + len(playerHand)))
+    #             if cardPlay > len(playerHand) or cardPlay < 1:
+    #                 print('Try again.')
+    #             cardPlay = int(cardPlay - 1)
+    #             playList.append(playerHand[cardPlay])
+    #             del playerHand[cardPlay]
+
+                
