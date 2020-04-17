@@ -1,5 +1,7 @@
 #works cited
 #https://pydealer.readthedocs.io/en/latest/usage.html#construct-a-deck
+#https://www.w3schools.com/python/python_dictionaries.asp
+#my bestest CS Friend
 
 #To Do
 # - DONE - Describe rules of play
@@ -112,41 +114,40 @@ while playerScore < 121 and comScore < 121:
     # for i in range(0,len(cribHand)):
     #     print(cribHand[i])
 
-    print(playerHand.get(1))
-    discardBool = False
-    for i in range(0,len(playerHand)):
-        #print(playerHand[i])
-        card = playerHand[i]
-        print(playerHand.values[i])
+    #print(playerHand.get(1))
+    # discardBool = False
+    # for i in range(0,len(playerHand)):
+    #     #print(playerHand[i])
+    #     card = playerHand[i]
+    #     cardVal = ProjectHelperV1.cribbageDict[card.value]
+    #     print(cardVal)
 
-    comScore = 122
+    # comScore = 122
 
     # Stage: Play
-    # communityCard = deck.deal(1)
-    # print('Community Card: ' + communityCard)
-    # if (playerDealer % 2) == 1:
-    #     print("You are the dealer, you play the first card.")
-    #     print('')
-    #     playerTurn = True 
-    # else:
-    #     print("The computer is the dealer, it will play first.")
-    #     playerTurn = False  
+    communityCard = deck.deal(1)
+    print('Community Card: ' + communityCard)
+    if (playerDealer % 2) == 1:
+        print("You are the dealer, you play the first card.")
+        print('')
+        playerTurn = True 
+    else:
+        print("The computer is the dealer, it will play first.")
+        playerTurn = False  
 
-    # playList = []
-    # legalBool = False
-    # while len(playerHand) != 0 and len(comHand) != 0:
-    #     #find a way to sum everything in the playList, empty it if it's >= 31
-    #     if playerTurn == True:
-    #         legalBool = False
-    #         while legalBool == False:
-    #             for i in range(0,len(playerHand)):
-    #                 print(playerHand[i])
-    #             print('')
-    #             cardPlay = int(input("Select a card to play, 1-" + len(playerHand)))
-    #             if cardPlay > len(playerHand) or cardPlay < 1:
-    #                 print('Try again.')
-    #             cardPlay = int(cardPlay - 1)
-    #             playList.append(playerHand[cardPlay])
-    #             del playerHand[cardPlay]
-
-                
+    playList = []
+    legalBool = False
+    while len(playerHand) != 0 and len(comHand) != 0:
+        #find a way to sum everything in the playList, empty it if it's >= 31
+        if playerTurn == True:
+            legalBool = False
+            while legalBool == False:
+                for i in range(0,len(playerHand)):
+                    print(playerHand[i])
+                print('')
+                cardPlay = int(input("Select a card to play, 1-" + len(playerHand)))
+                if cardPlay > len(playerHand) or cardPlay < 1:
+                    print('Try again.')
+                cardPlay = int(cardPlay - 1)
+                playList.append(playerHand[cardPlay])
+                del playerHand[cardPlay]

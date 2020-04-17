@@ -73,3 +73,19 @@ def Instructions():
     print("Finally, you get points for each unique series. A hand of 3-3-4-5 is therefore 2 unique '3-4-5' series.")
     print("Now you're ready to play!")
     print('')
+
+cribbageDict = {
+    'Ace' : 1,
+    '2' : 2,
+    '3' : 3,
+    '4' : 4,
+    '5' : 5,
+    '6' : 6,
+    '7' : 7,
+    '8' : 8,
+    '9' : 9,
+    '10' : 10,
+    'Jack' : 10,
+    'Queen' : 10,
+    'King' : 10
+}
