@@ -8,6 +8,8 @@
     # - DONE - make a cheat sheet for hands
     # make a program to count the user's hand
     # make a program to count the computer's hand
+    # make copies of hands to separate play points from hand points!
+    # go bool so that people can take consecutive turns if their partner has a go
     # - DONE - make a program to discard from the user and the computer to the crib
     # make a program to count points from the play
     # - DONE (-ISH?) - make a program to reshuffle and deal the deck
@@ -48,7 +50,9 @@ comScore = 0
 playerDealer = 3
 while playerScore < 121 and comScore < 121:
     # Stage: Deal
+    print('')
     print("Player deals first.")
+    print('')
     #make sure you set up something like a modulo. odd numbers, player deals. even, computer deals. +=1 after every round
     deck.shuffle(2)
     playerHand = deck.deal(6)
@@ -61,14 +65,20 @@ while playerScore < 121 and comScore < 121:
     while discardBool == False:
         for i in range(0,len(playerHand)):
             print(playerHand[i])
-        print("Type 'h' to bring up cheat sheet.")    
-        discard1=int(input("Choose a card, 1-6, to send the the crib."))
+        print('')
+        print("Type 'h' to bring up cheat sheet.")  
+        print('')  
+        discard1=(input("Choose a card, 1-6, to send the the crib."))
         if discard1 == 'h':
             ProjectHelperV1.CheatSheet()
-        elif discard1 > 6 or discard1 < 1:
-            print('Try again.')
         else:
-            discardBool = True    
+            discard1 = int(discard1)
+            if discard1 > 6 or discard1 < 1:
+                print('')
+                print('Try again.')
+                print('')
+            else:
+                discardBool = True    
     discard1 = int(discard1 - 1)
     cribHand.append(playerHand[discard1])
     del playerHand[discard1]
@@ -77,14 +87,20 @@ while playerScore < 121 and comScore < 121:
     while discardBool == False:   
         for i in range(0,len(playerHand)):
             print(playerHand[i])
-        print("Type 'h' to bring up cheat sheet.") 
-        discard1=int(input("Choose a card, 1-5, to send the the crib."))
+        print('')
+        print("Type 'h' to bring up cheat sheet.")
+        print('')
+        discard1=(input("Choose a card, 1-5, to send the the crib."))
         if discard1 == 'h':
             ProjectHelperV1.CheatSheet()
-        if discard1 > 5 or discard1 < 1:
-            print('Try again.')
         else:
-            discardBool = True 
+            discard1 = int(discard1)
+            if discard1 > 5 or discard1 < 1:
+                print('')
+                print('Try again.')
+                print('')
+            else:
+                discardBool = True 
     discard1 = int(discard1 - 1)
     cribHand.append(playerHand[discard1])
     del playerHand[discard1]
@@ -101,13 +117,15 @@ while playerScore < 121 and comScore < 121:
     # Stage: Play
     # Phase 1: Determine who plays first
     communityCard = deck.deal(1)
-    print('Community Card: ' + communityCard)
+    print('')
+    print('Community Card: ' + str(communityCard))
     if (playerDealer % 2) == 1:
         print("You are the dealer, you play the first card.")
         print('')
         playerTurn = True 
     else:
         print("The computer is the dealer, it will play first.")
+        print('')
         playerTurn = False  
 
     playList = []
@@ -119,7 +137,7 @@ while playerScore < 121 and comScore < 121:
     while len(playerHand) != 0 and len(comHand) != 0:
         #find a way to sum everything in the playList, empty it if it's >= 31
         # If it's the payer's turn, bool = true
-        if playerTurn == True:
+        if (playerTurn == True) or (goComBool == True):
             #If they make a move that would make the play over 31, move is illegal
             legalBool = False
             #This loops player until they make a legal play
@@ -128,15 +146,17 @@ while playerScore < 121 and comScore < 121:
                 for i in range(0,len(playerHand)):
                     print(playerHand[i])
                 print('')
-                cardPlay = (input("Select a card to play, 1-" + len(playerHand) + " or type 'go' if no legal."))
+                cardPlay = (input("Select a card to play, 1-" + str(len(playerHand)) + " or type 'go' if no legal."))
                 if cardPlay == 'go':
                     print("You pass the turn.")
                     legalBool = True
                     playerTurn = False
+                    goPlayerBool = True
                     break
                 cardPlay = int(cardPlay)
-                elif cardPlay > len(playerHand) or cardPlay < 1:
+                if cardPlay>(len(playerHand)) or cardPlay<1:
                     print('Try again.')
+                    break
                 cardPlay = int(cardPlay - 1)
                 playList.append(playerHand[cardPlay])
                 for i in range(0,len(playList)):
@@ -149,18 +169,18 @@ while playerScore < 121 and comScore < 121:
                     del playList[-1]
                 elif playSum <= 31:
                     print('Legal move ACCEPTED: ')
-                    print('Play Total: ' + playSum)
+                    print('Play Total: ' + str(playSum))
                     #legal move accepted, card removed form hand, players turn ends
                     del playerHand[cardPlay]
                     cardPlay = 0
                     legalBool = True
                     playerTurn = False
                 playSum = 0
-        elif playerTurn == False:
+        elif (playerTurn == False) or (goPlayerBool == True):
             legalBool = False
             turnCount = 0
-            while legalBool = False and turnCount < 30:
-                cardPlay = random.randint(0,3)
+            while legalBool == False and turnCount < 30:
+                cardPlay = random.randrange(0,len(comHand))
                 playList.append(comHand[cardPlay])
                 for i in range(0,len(playList)):
                     card = playList[i]
@@ -169,8 +189,23 @@ while playerScore < 121 and comScore < 121:
                     del playList[-1]
                 elif playSum <= 31:
                     print('Computer move ACCEPTED: ')
-                    print('Play Total: ' + playSum)
+                    print('Play Total: ' + str(playSum))
                     del comHand[cardPlay]
                     cardPlay = 0
                     legalBool = True
-                    playerTurn = False
+                    playerTurn = True
+                turnCount += 1
+            if turnCount >= 30:
+                print("Computer says, 'Go': ")
+                playerTurn = True
+                goComBool = True
+                break
+            playSum = 0
+        elif goPlayerBool == True and goComBool == True:
+            break
+
+    
+    for i in range(0, len(playList)):
+        print(playList[i])
+    
+    playerScore = 122

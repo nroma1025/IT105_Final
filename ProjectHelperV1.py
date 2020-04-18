@@ -1,14 +1,19 @@
 import random
 
 def CheatSheet():
+    print('')
     playPoints = ['Pair-2', 'Three of a Kind-3', 'Four of a Kind-4', 'Nonconsecutive series-# cards in series', 'Sum to 15-2', 'Sum to 31-2', 'Last Card-1', 'Nobs-2']
     handPoints = ['Pair-2', 'Three of a Kind-6', 'Four of a Kind-12', 'Series-# cards in series', 'Sum to 15-2', 'Four card flush-4', 'Five card flush-5', 'Nibs-1']
     print("Points can be earned during play like so: ")
+    print('')
     for i in range(0,len(playPoints)):
         print(playPoints[i])
+    print('')
     print("Points can be earned in the hand and crib like so: ")
+    print('')
     for i in range(0,len(handPoints)):
         print(handPoints[i])
+    print('')
     return()
   
 def Instructions():
@@ -115,4 +120,7 @@ cribbageDict = {
 
 # comScore = 122
 
-def PlayScore(list):
+#def PlayScore(list):
+
+#Award points for go based on go value
+#Award points for last card based on player turn value
