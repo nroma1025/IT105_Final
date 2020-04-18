@@ -1,4 +1,5 @@
 import random
+import math
 
 def CheatSheet():
     print('')
@@ -95,6 +96,38 @@ cribbageDict = {
     'King' : 10
 }
 
+rankDict = {
+    'Ace' : 13,
+    '2' : 1,
+    '3' : 2,
+    '4' : 3,
+    '5' : 4,
+    '6' : 5,
+    '7' : 6,
+    '8' : 7,
+    '9' : 8,
+    '10' : 9,
+    'Jack' : 10,
+    'Queen' : 11,
+    'King' : 12
+}
+
+rankDict2 = {
+    'Ace' : 1,
+    '2' : 2,
+    '3' : 3,
+    '4' : 4,
+    '5' : 5,
+    '6' : 6,
+    '7' : 7,
+    '8' : 8,
+    '9' : 9,
+    '10' : 10,
+    'Jack' : 11,
+    'Queen' : 12,
+    'King' : 13
+}
+
 #test for discard phase
 # print('')
 # print("Your hand: ")
@@ -120,7 +153,105 @@ cribbageDict = {
 
 # comScore = 122
 
-#def PlayScore(list):
+#def NobsCheck(communityCard)
+
+#Def HandScore
+
+def Series3(aList):
+        newPoints = 0
+        newList = aList[-3:]
+        newList.sort()
+        if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
+            print('')
+            print('Series of 3: 3 pts')
+            print('')
+            newPoints+=3
+        return newPoints
+def Series4(aList):
+    newPoints = 0
+    newList = aList[-4:]
+    newList.sort()
+    if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
+        if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
+            if int(rankDict[newList[-3].value]) - int(rankDict[newList[-4].value]) == 1:
+                print('')
+                print('Series of 4: 4 pts')
+                print('')
+                newPoints+=4
+    return newPoints
+def Series5(aList):
+    newPoints = 0
+    newList = aList[-5:]
+    newList.sort()
+    if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
+        if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
+            if int(rankDict[newList[-3].value]) - int(rankDict[newList[-4].value]) == 1:
+                if int(rankDict[newList[-4].value]) - int(rankDict[newList[-5].value]) == 1:
+                    print('')
+                    print('Series of 5: 5 pts')
+                    print('')
+                    newPoints+=5
+    return newPoints
+
+def PlayScore(aList):
+    points = 0
+    #Check for 15's
+    psum = 0
+    for i in range (0, len(aList)):
+        psum = psum + int(cribbageDict[aList[i].value])
+    if psum == 15:
+        points =+ 2
+        print('')
+        print('15: 2 pts')
+        print('')
+    #check for series
+    if len(aList) >= 3:
+        points += Series3(aList)
+    if len(aList) >= 4:
+        points += Series4(aList)
+    if len(aList) >= 5:
+        points += Series5(aList)    
+    #Check for pairs
+    if len(aList) >= 2:
+        card1 = aList[-1]
+        card2 = aList[-2]
+        if card1.value == card2.value:
+            points += 2
+            print('')
+            print('Pair: 2 pts')
+            print('')
+    #Check for trips
+    if len(aList) >= 3:
+        card1 = aList[-1]
+        card2 = aList[-2]
+        card3 = aList[-3]
+        if card1.value == card2.value and card1.value == card3.value:
+            points += 3
+            print('')
+            print('3 of a Kind: 3 pts')
+            print('')
+    #Check for quads
+    if len(aList) >= 4:
+        card1 = aList[-1]
+        card2 = aList[-2]
+        card3 = aList[-3]
+        card4 = aList[-4]
+        if card1.value == card2.value and card1.value == card3.value and card1.value == card4.value:
+            points += 4
+            print('')
+            print('4 of a Kind: 4 pts')
+            print('')
+    #check for 31
+    psum = 0
+    for i in range (0, len(aList)):
+        psum = psum + int(cribbageDict[aList[i].value])
+    if psum == 31:
+        points =+ 2
+        print('')
+        print('31: 2 pts')
+        print('')   
+    return(points)
+    
 
 #Award points for go based on go value
 #Award points for last card based on player turn value

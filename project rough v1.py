@@ -8,16 +8,14 @@
     # - DONE - make a cheat sheet for hands
     # make a program to count the user's hand
     # make a program to count the computer's hand
-    # make copies of hands to separate play points from hand points!
-    # go bool so that people can take consecutive turns if their partner has a go
+    # - DONE - make copies of hands to separate play points from hand points!
+    # - DONE - go bool so that people can take consecutive turns if their partner has a go
     # - DONE - make a program to discard from the user and the computer to the crib
     # make a program to count points from the play
     # - DONE (-ISH?) - make a program to reshuffle and deal the deck
     #thoughts: have a list, append each time a card is played. compare ranks to detect for non-con series?
     #thoughts: have a whole separate module to check for scoring conditions?
     #thoughts: make a roll check to see if the computer will forget to count points based on difficulty
-    #thoughts: how am i going to let the game know if someone can take more consecutive turns?
-    # can i sum up the 'play' list? do they have a number value? can i see if it's possible to sum up a user's hand to see if its a 'go'?
     #Definite trouble areas: nonconsec-series, 'go's, determining whose turn
     # If i can find a way to get into pydealer and turn 'value' from str to int, this would be good
     # - DONE - Stage: Intro
@@ -28,9 +26,8 @@
     # Stage: Crib
     # Stage: End Round
 
-
 import pydealer
-import ProjectHelperV1
+import ProjectHelperV1 as helper
 import random
 
 # Stage: Intro
@@ -39,7 +36,7 @@ while introChoice != 'y' and introChoice != 'n':
     print("Not today, ISIS. Try a valid input.")
     introChoice = input("Welcome to Cribbage! Would you like a description of the rules? [y/n]")
 if introChoice == 'y':
-    ProjectHelperV1.Instructions()
+    helper.Instructions()
 elif introChoice == 'n':
     print("You're ready to play!")
 
@@ -70,7 +67,7 @@ while playerScore < 121 and comScore < 121:
         print('')  
         discard1=(input("Choose a card, 1-6, to send the the crib."))
         if discard1 == 'h':
-            ProjectHelperV1.CheatSheet()
+            helper.CheatSheet()
         else:
             discard1 = int(discard1)
             if discard1 > 6 or discard1 < 1:
@@ -92,7 +89,7 @@ while playerScore < 121 and comScore < 121:
         print('')
         discard1=(input("Choose a card, 1-5, to send the the crib."))
         if discard1 == 'h':
-            ProjectHelperV1.CheatSheet()
+            helper.CheatSheet()
         else:
             discard1 = int(discard1)
             if discard1 > 5 or discard1 < 1:
@@ -117,6 +114,8 @@ while playerScore < 121 and comScore < 121:
     # Stage: Play
     # Phase 1: Determine who plays first
     communityCard = deck.deal(1)
+    playerHand2 = playerHand
+    comHand2 = comHand
     print('')
     print('Community Card: ' + str(communityCard))
     if (playerDealer % 2) == 1:
@@ -161,7 +160,7 @@ while playerScore < 121 and comScore < 121:
                 playList.append(playerHand[cardPlay])
                 for i in range(0,len(playList)):
                     card = playList[i]
-                    playSum = playSum + ProjectHelperV1.cribbageDict[card.value]
+                    playSum = playSum + helper.cribbageDict[card.value]
                 #This is the actual test for a legal play
                 if playSum > 31:
                     print('Play over 31, move not possible. Try again.')
@@ -175,6 +174,9 @@ while playerScore < 121 and comScore < 121:
                     cardPlay = 0
                     legalBool = True
                     playerTurn = False
+                    playerScore += helper.PlayScore(playList)
+                    print('')
+                    print("Player Points: " + str(playerScore))
                 playSum = 0
         elif (playerTurn == False) or (goPlayerBool == True):
             legalBool = False
@@ -184,7 +186,7 @@ while playerScore < 121 and comScore < 121:
                 playList.append(comHand[cardPlay])
                 for i in range(0,len(playList)):
                     card = playList[i]
-                    playSum = playSum + ProjectHelperV1.cribbageDict[card.value]
+                    playSum = playSum + helper.cribbageDict[card.value]
                 if playSum > 31:
                     del playList[-1]
                 elif playSum <= 31:
@@ -194,6 +196,9 @@ while playerScore < 121 and comScore < 121:
                     cardPlay = 0
                     legalBool = True
                     playerTurn = True
+                    comScore += helper.PlayScore(playList)
+                    print('')
+                    print("Player Points: " + str(playerScore))
                 turnCount += 1
             if turnCount >= 30:
                 print("Computer says, 'Go': ")
@@ -203,9 +208,7 @@ while playerScore < 121 and comScore < 121:
             playSum = 0
         elif goPlayerBool == True and goComBool == True:
             break
-
     
     for i in range(0, len(playList)):
         print(playList[i])
     
-    playerScore = 122
