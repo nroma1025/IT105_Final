@@ -153,24 +153,65 @@ rankDict2 = {
 
 # comScore = 122
 
-#def NobsCheck(communityCard)
 
-#Def HandScore
+def HandScore(hand):
+    newPoints = 0
+    rankHand1 = hand
+    rankHand2 = hand
+    for i in range (0, len(rankHand)):
+        rankHand1[i] = rankDict[hand[i].value]
+        rankHand2[i] = rankDict2[hand[i].value]
+    rankHand1.sort()
+    rankHand2.sort()
+    pointHand = hand
+    sumH = 0
+    for i in range (0,len(pointHand)):
+        pointHand[i] = cribbageDict[hand[i].value]
+    #check for 15s
+    for p in range (0,5):
+        for i in range ((p+1),6):
+            if pointHand[p]+pointHand[i] == 15:
+                newPoints += 2
+        for i in range(p+2, 6):
+            if pointHand[p]+pointHand[p+1]+pointHand[i] == 15:
+                newPoints += 2
+        for i in range(p+3, 6):
+            if pointHand[p]+pointHand[p+1]+pointHand[p+2]+pointHand[i] == 15:
+                newPoints += 2
+        for i in range(p+4, 6):
+            if pointHand[p]+pointHand[p+1]+pointHand[p+2]+pointHand[p+3]+pointHand[i] == 15:
+                newPoints += 2
+    for i in range(0,6):
+        sumH = sumH + pointHand[i]
+    if sumH == 15:
+        newPoints +=2
+    return (int(newPoints))
+        
+
+    #check for series
+    #check for 4 card flush
+    #check for 5 card flush
+    #check for pairs
+    #check for trips
+    #check for quads
+    #check for nibs
 
 def Series3(aList):
         newPoints = 0
         newList = aList[-3:]
         newList.sort()
         if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
-            print('')
-            print('Series of 3: 3 pts')
-            print('')
-            newPoints+=3
+            if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
+                print('')
+                print('Series of 3: 3 pts')
+                print('')
+                newPoints+=3
         return newPoints
 def Series4(aList):
     newPoints = 0
     newList = aList[-4:]
     newList.sort()
+    seriesBool = False
     if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
         if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
             if int(rankDict[newList[-3].value]) - int(rankDict[newList[-4].value]) == 1:
@@ -178,11 +219,20 @@ def Series4(aList):
                 print('Series of 4: 4 pts')
                 print('')
                 newPoints+=4
+                seriesBool = True
+    if seriesBool == False:
+        if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
+            if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
+                print('')
+                print('Series of 3: 3 pts')
+                print('')
+                newPoints+=3
     return newPoints
 def Series5(aList):
     newPoints = 0
     newList = aList[-5:]
     newList.sort()
+    seriesBool = False
     if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
         if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
             if int(rankDict[newList[-3].value]) - int(rankDict[newList[-4].value]) == 1:
@@ -191,6 +241,23 @@ def Series5(aList):
                     print('Series of 5: 5 pts')
                     print('')
                     newPoints+=5
+                    seriesBool = True
+    if seriesBool == False:
+        if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
+            if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
+                if int(rankDict[newList[-3].value]) - int(rankDict[newList[-4].value]) == 1:
+                    print('')
+                    print('Series of 4: 4 pts')
+                    print('')
+                    newPoints+=4
+                    seriesBool = True
+    if seriesBool == False:
+        if int(rankDict[newList[-1].value]) - int(rankDict[newList[-2].value]) == 1:
+            if int(rankDict[newList[-2].value]) - int(rankDict[newList[-3].value]) == 1:
+                print('')
+                print('Series of 3: 3 pts')
+                print('')
+                newPoints+=3
     return newPoints
 
 def PlayScore(aList):
@@ -205,11 +272,11 @@ def PlayScore(aList):
         print('15: 2 pts')
         print('')
     #check for series
-    if len(aList) >= 3:
+    if len(aList) == 3:
         points += Series3(aList)
-    if len(aList) >= 4:
+    if len(aList) == 4:
         points += Series4(aList)
-    if len(aList) >= 5:
+    if len(aList) == 5:
         points += Series5(aList)    
     #Check for pairs
     if len(aList) >= 2:
@@ -251,7 +318,3 @@ def PlayScore(aList):
         print('31: 2 pts')
         print('')   
     return(points)
-    
-
-#Award points for go based on go value
-#Award points for last card based on player turn value
