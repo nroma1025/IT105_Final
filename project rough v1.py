@@ -38,18 +38,18 @@ elif introChoice == 'n':
 
 playerScore = 0
 comScore = 0
-playerDealer = 3
-while playerScore < 121 and comScore < 121:
+playerDealer = 2
+print('')
+print("Player deals first.")
+print('')
+while playerScore < 30 and comScore < 30:
     # Stage: Deal
+    playerDealer += 1
     deck = pydealer.Deck()
-    print('')
-    print("Player deals first.")
-    print('')
-    #make sure you set up something like a modulo. odd numbers, player deals. even, computer deals. +=1 after every round
     deck.shuffle(2)
     playerHand = deck.deal(6)
     comHand = deck.deal(6)
-    cribHand = []
+    cribHand = deck.deal(0)
     
     # Stage: Discard
     # Phase 1: Player discard first card
@@ -72,8 +72,9 @@ while playerScore < 121 and comScore < 121:
             else:
                 discardBool = True    
     discard1 = int(discard1 - 1)
-    cribHand.append(playerHand[discard1])
+    cribHand.add(playerHand[discard1])
     del playerHand[discard1]
+
     # Phase 2: player discard second card
     discardBool = False
     while discardBool == False:   
@@ -94,28 +95,28 @@ while playerScore < 121 and comScore < 121:
             else:
                 discardBool = True 
     discard1 = int(discard1 - 1)
-    cribHand.append(playerHand[discard1])
+    cribHand.add(playerHand[discard1])
     del playerHand[discard1]
+
     # Phase 3: Computer discards cards
     discard1 = int(random.randint(0,5))
-    discardStr = comHand[discard1]
-    cribHand.append(discardStr)
+    #discardStr = comHand[discard1]
+    cribHand.add(comHand[discard1])
     del comHand[discard1]
     discard1 = int(random.randint(0,4))
-    discardStr = comHand[discard1]
-    cribHand.append(discardStr)
+    #discardStr = comHand[discard1]
+    cribHand.add(comHand[discard1])
     del comHand[discard1]
 
     # Stage: Play
     # Phase 1: Determine who plays first
     communityStack = deck.deal(1)
     communityCard = communityStack[0]
-    playerHand2 = []
-    for i in range(0,3):
-        playerHand2.append(playerHand[i])
-    comHand2 = []
-    for i in range(0,3):
-        comHand2.append(playerHand[i])
+    playerHand2 = deck.deal(0)
+    comHand2 = deck.deal(0)
+    for i in range(0,4):
+        playerHand2.add(playerHand[i])
+        comHand2.add(comHand[i])
     print('')
     print('Community Card: ' + str(communityCard))
     if (playerDealer % 2) == 1:
@@ -135,17 +136,16 @@ while playerScore < 121 and comScore < 121:
         playerTurn = False
         didPlayerDeal = False  
 
-    playList = []
+    playList = deck.deal(0)
     legalBool = False
     playSum = 0
     goPlayerBool = False
     goComBool = False
-    playNextBool = True
+    playNextBool = False
     # Phase 2: If someone has cards, play continues
     while len(playerHand) != 0 and len(comHand) != 0:
         # If it's the payer's turn, bool = true
         if ((playerTurn == True) or (goComBool == True) or playNextBool==True) and goPlayerBool != True:
-            #If they make a move that would make the play over 31, move is illegal
             legalBool = False
             #This loops player until they make a legal play
             while legalBool == False:
@@ -178,7 +178,7 @@ while playerScore < 121 and comScore < 121:
                     print('Try again.')
                     pass
                 cardPlay = int(cardPlay - 1)
-                playList.append(playerHand[cardPlay])
+                playList.add(playerHand[cardPlay])
                 for i in range(0,len(playList)):
                     card = playList[i]
                     playSum = playSum + helper.cribbageDict[card.value]
@@ -196,6 +196,8 @@ while playerScore < 121 and comScore < 121:
                     legalBool = True
                     playerTurn = False
                     playerScore += helper.PlayScore(playList)
+                    print('')
+                    print("Player Points: " + str(playerScore))
                 playSum = 0
         elif (playerTurn == False) or (goPlayerBool == True):
             legalBool = False
@@ -207,7 +209,7 @@ while playerScore < 121 and comScore < 121:
                     playerTurn = True
                     pass
                 cardPlay = random.randrange(0,len(comHand))
-                playList.append(comHand[cardPlay])
+                playList.add(comHand[cardPlay])
                 for i in range(0,len(playList)):
                     card = playList[i]
                     playSum = playSum + helper.cribbageDict[card.value]
@@ -242,15 +244,19 @@ while playerScore < 121 and comScore < 121:
             print("Play reset. Play total = 0")
             goPlayerBool = False
             goComBool = False
-            playList.clear()
-            communityStack.empty()
-            deck.empty()
+            playList.empty()
             pass
-        playerDealer += 1
-    # Stage: Hand Scoring
-    playerHand2.append(communityCard)
-    comHand2.append(communityCard)
-    cribHand.append(communityCard)
+    if playerTurn == True:
+        print("Computer gets points for Last Card.")
+        comScore += 1
+    elif playerTurn == False:
+        print("Player gets points for Last Card")
+        playerScore += 1
+
+    # Stage: Hand Scoring and Crib Scoring
+    playerHand2.add(communityCard)
+    comHand2.add(communityCard)
+    cribHand.add(communityCard)
 
     if didPlayerDeal == True:
         print('')
@@ -265,8 +271,8 @@ while playerScore < 121 and comScore < 121:
         print("Player score: " + str(playerScore))
         print('')
         print("Calculating Player Crib...")
-        playerScore += helper.HandScore(cribHand, communityCard)
-        print('Crib worth ' + str(helper.HandScore(cribHand, communityCard)))
+        playerScore += helper.HandScore(playerHand2, communityCard)
+        print('Crib worth ' + str(helper.HandScore(playerHand2, communityCard)))
         print("Player score: " + str(playerScore))
     if didPlayerDeal == False:
         print('')
@@ -281,10 +287,16 @@ while playerScore < 121 and comScore < 121:
         print("Computer Score: " + str(comScore))
         print('')
         print("Calculating Computer Crib...")
-        comScore += helper.HandScore(cribHand, communityCard)
-        print('Crib worth ' + str(helper.HandScore(cribHand, communityCard)))
-        print("Computer score: " + str(playerScore))
+        comScore += helper.HandScore(comHand2, communityCard)
+        print('Crib worth ' + str(helper.HandScore(comHand2, communityCard)))
+        print("Computer score: " + str(comScore))
 
     print('')
     print("NEXT ROUND")
     print('')
+    communityStack.empty()
+    deck.empty()
+if playerScore > comScore:
+    print("Congrats! You Won!")
+elif comScore > playerScore:
+    print("Sorry, computer won.")

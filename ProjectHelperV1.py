@@ -1,10 +1,11 @@
 import random
 import math
+import pydealer
 
 def CheatSheet():
     print('')
     playPoints = ['Pair-2', 'Three of a Kind-3', 'Four of a Kind-4', 'Nonconsecutive series-# cards in series', 'Sum to 15-2', 'Sum to 31-2', 'Last Card-1', 'Nobs-2']
-    handPoints = ['Pair-2', 'Three of a Kind-6', 'Four of a Kind-12', 'Series-# cards in series', 'Sum to 15-2', 'Four card flush-4', 'Five card flush-5', 'Nibs-1']
+    pointHand = ['Pair-2', 'Three of a Kind-6', 'Four of a Kind-12', 'Series-# cards in series', 'Sum to 15-2', 'Four card flush-4', 'Five card flush-5', 'Nibs-1']
     print("Points can be earned during play like so: ")
     print('')
     for i in range(0,len(playPoints)):
@@ -12,8 +13,8 @@ def CheatSheet():
     print('')
     print("Points can be earned in the hand and crib like so: ")
     print('')
-    for i in range(0,len(handPoints)):
-        print(handPoints[i])
+    for i in range(0,len(pointHand)):
+        print(pointHand[i])
     print('')
     return()
   
@@ -57,9 +58,9 @@ def Instructions():
             continuePrompt = True
         else:
             continuePrompt = False
-    handPoints = ['Pair-2', 'Three of a Kind-6', 'Four of a Kind-12', 'Series-# cards in series', 'Sum to 15-2', 'Four card flush-4', 'Five card flush-5', 'Nibs-1']
-    for i in range(0,len(handPoints)):
-        print(handPoints[i])
+    pointHand = ['Pair-2', 'Three of a Kind-6', 'Four of a Kind-12', 'Series-# cards in series', 'Sum to 15-2', 'Four card flush-4', 'Five card flush-5', 'Nibs-1']
+    for i in range(0,len(pointHand)):
+        print(pointHand[i])
     continuePrompt = False
     while continuePrompt == False:    
         continuePrompt = input("Press 'y' to continue: ")
@@ -131,151 +132,129 @@ suitDict = {
     "Clubs": 2,
     "Diamonds": 1
 }
-#test for discard phase
-# print('')
-# print("Your hand: ")
-# for i in range(0,len(playerHand)):
-#     print(playerHand[i])
-# print('')
-# print("Computuer's hand: ")
-# for i in range(0,len(comHand)):
-#     print(comHand[i])
-# print('')
-# print('Crib: ')
-# for i in range(0,len(cribHand)):
-#     print(cribHand[i])
-
-#Some random example code for accessing dicts
-# print(playerHand.get(1))
-# discardBool = False
-# for i in range(0,len(playerHand)):
-#     #print(playerHand[i])
-#     card = playerHand[i]
-#     cardVal = ProjectHelperV1.cribbageDict[card.value]
-#     print(cardVal)
-
-# comScore = 122
-
 
 def HandScore(hand, card):
     newPoints = 0
-    rankHand1 = []
-    rankHand2 = []
-    for i in range (0, len(rankHand1)):
-        rankHand1[i] = rankDict[hand[i].value]
-        rankHand2[i] = rankDict2[hand[i].value]
-    rankHand1.sort()
-    rankHand2.sort()
-    pointHand = hand
+    deck = pydealer.Deck()
+    handRank = deck.deal(0)
+    handRankL = []
+    for i in range (0, len(hand)):
+        handRank.add(rankDict[hand[i].value])
+        handRankL.append(handRank[i])
+    handRankL.sort() 
+    pointHand = deck.deal(0)
+    pointHandL = []
+    for i in range (0, len(hand)):
+        pointHand.add(cribbageDict[hand[i].value])
+        pointHandL.append(pointHand[i])
+    pointHandL.sort() 
     sumH = 0
-    for i in range (0,len(pointHand)):
-        pointHand[i] = cribbageDict[hand[i].value]
     #check for 15s
-    for p in range (0,4):
+    for p in range (0,len(pointHandL)):
         if p <= 3:
-            for i in range ((p+1),5):
-                if pointHand[p]+pointHand[i] == 15:
+            for i in range ((p+1),len(pointHandL)):
+                if pointHandL[p]+pointHandL[i] == 15:
                     newPoints += 2
         if p <= 2:
-            for i in range(p+2, 5):
-                if pointHand[p]+pointHand[p+1]+pointHand[i] == 15:
+            for i in range(p+2, len(pointHandL)):
+                if pointHandL[p]+pointHandL[p+1]+pointHandL[i] == 15:
                     newPoints += 2
         if p <= 1:
-            for i in range(p+3, 5):
-                if pointHand[p]+pointHand[p+1]+pointHand[p+2]+pointHand[i] == 15:
+            for i in range(p+3, len(pointHandL)):
+                if pointHandL[p]+pointHandL[p+1]+pointHandL[p+2]+pointHandL[i] == 15:
                     newPoints += 2
         if p <= 0:
-            for i in range(p+4, 5):
-                if pointHand[p]+pointHand[p+1]+pointHand[p+2]+pointHand[p+3]+pointHand[i] == 15:
+            for i in range(p+4, len(pointHandL)):
+                if pointHandL[p]+pointHandL[p+1]+pointHandL[p+2]+pointHandL[p+3]+pointHandL[i] == 15:
                     newPoints += 2
-    for i in range(0,5):
-        sumH = sumH + pointHand[i]
+    for i in range(0,len(pointHandL)):
+        sumH = sumH + pointHandL[i]
     if sumH == 15:
         newPoints +=2
     return (int(newPoints))
     #check for series
     #3 series
     for i in range (0,3):
-        if rankHand1[i+2] - rankHand1[i+1] == 1:
-            if rankHand1[i+1] - rankHand1[i] == 1:
+        if handRank[i+2] - handRank[i+1] == 1:
+            if handRank[i+1] - handRank[i] == 1:
                 newPoints += 3
     for i in range (0,2):
-        if rankHand1[i] == rankHand1[i+1]:
-            if rankHand1[i+3] - rankHand1[i+2] == 1:
-                if rankHand1[i+2] - rankHand1[i+1] ==1:
+        if handRank[i] == handRank[i+1]:
+            if handRank[i+3] - handRank[i+2] == 1:
+                if handRank[i+2] - handRank[i+1] ==1:
                     newPoints += 3
-        if rankHand1[i+1] == rankHand[i+2]:
-            if rankHand1[i+1] - rankHand1[i] == 1:
+        if handRank[i+1] == rankHand[i+2]:
+            if handRank[i+1] - handRank[i] == 1:
                 if rankHand[i+3] - rankHand[i+2] == 1:
                     newPoints += 3
-        if rankHand1[i+2] == rankHand[i+3]:
-            if rankHand1[i+2] - rankHand1[i+1] == 1:
-                if rankHand1[i+1] - rankHand[i] == 1:
+        if handRank[i+2] == rankHand[i+3]:
+            if handRank[i+2] - handRank[i+1] == 1:
+                if handRank[i+1] - rankHand[i] == 1:
                     newPoints += 3
     #series of 4
     for i in range (0,1):
-        if rankHand1[i+3] - rankHand1[i+2] == 1:
-            if rankHand1[i+2] - rankHand1[i+1] == 1:
-                if rankHand1[i+1] - rankHand1[i] == 1:
+        if handRank[i+3] - handRank[i+2] == 1:
+            if handRank[i+2] - handRank[i+1] == 1:
+                if handRank[i+1] - handRank[i] == 1:
                     newPoints -= 2
     for i in range (0,1):
-        if rankHand1[i] == rankHand1[i+1]:
-            if rankHand1[i+4] - rankHand1[1+3] == 1:
-                if rankHand1[i+3] - rankHand1[i+2] == 1:
-                    if rankHand1[i+2] - rankHand1[i+1] ==1:
+        if handRank[i] == handRank[i+1]:
+            if handRank[i+4] - handRank[1+3] == 1:
+                if handRank[i+3] - handRank[i+2] == 1:
+                    if handRank[i+2] - handRank[i+1] ==1:
                         newPoints += 4
-        if rankHand1[i+1] == rankHand[i+2]:
-            if rankHand1[i+1] - rankHand1[i] == 1:
-                if rankHand1[i+4] - rankHand1[i+3] == 1:
+        if handRank[i+1] == rankHand[i+2]:
+            if handRank[i+1] - handRank[i] == 1:
+                if handRank[i+4] - handRank[i+3] == 1:
                     if rankHand[i+3] - rankHand[i+2] == 1:
                         newPoints += 4
-        if rankHand1[i+2] == rankHand[i+3]:
-            if rankHand1[i+2] - rankHand1[i+1] == 1:
-                if rankHand1[i+1] - rankHand[i] == 1:
-                    if rankHand1[i+4] - rankHand1[i+3] == 1:
+        if handRank[i+2] == rankHand[i+3]:
+            if handRank[i+2] - handRank[i+1] == 1:
+                if handRank[i+1] - rankHand[i] == 1:
+                    if handRank[i+4] - handRank[i+3] == 1:
                         newPoints += 4
-        if rankHand1[i+3] == rankHand1[i+4]:
-            if rankHand1[i+3] - rankHand[i+2] == 1:
-                if rankHand1[i+2] - rankHand1[i+1] == 1:
-                    if rankHand1[i+1] - rankHand1[i] == 1:
+        if handRank[i+3] == handRank[i+4]:
+            if handRank[i+3] - rankHand[i+2] == 1:
+                if handRank[i+2] - handRank[i+1] == 1:
+                    if handRank[i+1] - handRank[i] == 1:
                         newPoints +=4
     #series of 5
-    if rankHand1[5] - rankHand1[4] == 1:
-        if rankHand1[4] - rankHand[3] == 1:    
-            if rankHand1[3] - rankHand[2] == 1:
-                if rankHand1[2] - rankHand1[1] == 1:
-                    if rankHand1[1] - rankHand1[0] == 1:
+    if handRank[5] - handRank[4] == 1:
+        if handRank[4] - rankHand[3] == 1:    
+            if handRank[3] - rankHand[2] == 1:
+                if handRank[2] - handRank[1] == 1:
+                    if handRank[1] - handRank[0] == 1:
                         newPoints -= 3
     #check for 4 card flush
-    suitHand = []
+    handSuit = deck.deal(0)
     for i in range(0,6):
-        suitHand[i] = suitDict[hand[i].suit]
-    suitHand.sort()
+        handSuit.add(suitDict[hand[i].suit])
+    handSuit.sort()
     for i in range(0,2):
-        if suitHand[i] == suitHand[i+1]:
-            if suitHand[i+1] == suitHand[i+2]:
-                if suitHand[i+2] == suitHand[i+3]:
+        if handSuit[i] == handSuit[i+1]:
+            if handSuit[i+1] == handSuit[i+2]:
+                if handSuit[i+2] == handSuit[i+3]:
                     newPoints += 4
     #check for 5 card flush
-    if suitHand[0] == suitHand[1]:
-        if suitHand[1] == suitHand[2]:
-            if suitHand[2] == suitHand[3]:
-                if suitHand[3] == suitHand[4]:
+    if handSuit[0] == handSuit[1]:
+        if handSuit[1] == handSuit[2]:
+            if handSuit[2] == handSuit[3]:
+                if handSuit[3] == handSuit[4]:
                     newPoints += 1
     #check for pairs
     for i in range (0,4):
-        if rankHand1[i] == rankHand1[i+1]:
+        if handRank[i] == handRank[i+1]:
             newPoints += 2
     #check for trips
     for i in range (0,3):
-        if rankHand1[i] == rankHand1[i+1] and rankHand1[i+1] == rankHand1[i+2]:
+        if handRank[i] == handRank[i+1] and handRank[i+1] == handRank[i+2]:
             newPoints += 2
     #check for quads
     for i in range(0,2):
-        if rankHand1[i] == rankHand1[i+1] and rankHand1[i+1] == rankHand1[i+2] and rankHand1[i+2] == rankHand1[i+3]:
+        if handRank[i] == handRank[i+1] and handRank[i+1] == handRank[i+2] and handRank[i+2] == handRank[i+3]:
             newPoints += 2
     #check for nibs
-    for i in range (0,6):
+    for i in range (0,5):
         if hand[i].value == "Jack" and suitDict[hand[i].suit] == suitDict[card.suit]:
             newPoints += 1
 
