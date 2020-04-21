@@ -1,13 +1,27 @@
 #works cited
-    #https://pydealer.readthedocs.io/en/latest/usage.html#construct-a-deck
-    #https://www.w3schools.com/python/python_dictionaries.asp
-    #my bestest CS Friend
+    ##### CITATION 1 #####
+    # PyDealer: Playing Card Package. c2015 [cited 2020 APR 21]. 
+    # This is an open-source library that took all of the legwork out of creating
+    # a functional deck of cards. This was invaluable.
+    # Available from: https://pydealer.readthedocs.io/en/latest/usage.html#construct-a-deck
+    ##### CITATION 2 #####
+    # Python Dictionaries. c2020 [cited 2020 APR 21].
+    # I looked up dictionaries, their relevance to my project, and how to use them.
+    # Available from: https://www.w3schools.com/python/python_dictionaries.asp
+    ##### CITATION 3 #####
+    # O'Shea, Ryan P, Stevens Institute of Technology '20. 2020 APR 18. 
+    # Assistance given to the author, verbal discussion.  
+    # Mr. O'Shea assisted me in the use of dictionaries to use for
+    # comparing items within stacks to each other. Using the dictionaries,
+    # i was able to construct the flow of logic for scoring hands and plays.
+    # Mr. O'Shea was also instrumental in helping to troubleshoot runtime errors.
+    # Toms River, NJ.
 
 #To Do
     # - DONE - Describe rules of play
     # - DONE - make a cheat sheet for hands
-    # make a program to count the user's hand
-    # make a program to count the computer's hand
+    # - DONE - make a program to count the user's hand
+    # - DONE - make a program to count the computer's hand
     # - DONE - make copies of hands to separate play points from hand points!
     # - DONE - go bool so that people can take consecutive turns if their partner has a go
     # - DONE - make a program to discard from the user and the computer to the crib
@@ -18,9 +32,9 @@
     # - DONE - Stage: Deal
     # - DONE - Stage: Discard
     # - DONE - Stage: Play
-    # Stage: Hand
-    # Stage: Crib
-    # Stage: End Round
+    # - DONE - Stage: Hand
+    # - DONE - Stage: Crib
+    # - DONE - Stage: End Round
 
 import pydealer
 import ProjectHelperV1 as helper
